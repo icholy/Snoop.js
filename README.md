@@ -1,7 +1,7 @@
 Snoop.js
 ========
 
-> This tool will log all function invocations on an object.
+> This tool will log all method invocations on an object.
 
 
 ``` js
