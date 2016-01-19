@@ -2,12 +2,16 @@ var snoop = function (className, object, options) {
   
   var options      = options || {},
       execute      = options.execute,
-      showReturn   = options.showReturn, 
-      showArgNames = options.showArgNames;
+      showReturn   = options.showReturn,
+      showArgNames = options.showArgNames,
+      callback     = options.callback;
+
+  var noop = function () {};
 
   if (typeof execute      === 'undefined') { execute      = true; }
   if (typeof showReturn   === 'undefined') { showReturn   = true; }
   if (typeof showArgNames === 'undefined') { showArgNames = true; }
+  if (typeof callback     === 'undefined') { filter       = noop; }
 
   var FN_ARGS        = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
       FN_ARG_SPLIT   = /,/,
@@ -60,10 +64,12 @@ var snoop = function (className, object, options) {
       if (execute) {
         ret = fn.apply(this, args);
       }
-      console.log.apply(
-        console,
-        formatMsg(key, sig, args, ret)
-      );
+      if (callback(key, args, ret) === false) {
+        console.log.apply(
+          console,
+          formatMsg(key, sig, args, ret)
+        );
+      }
       return ret;
     };
   };
