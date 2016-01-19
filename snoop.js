@@ -38,8 +38,8 @@ var snoop = function (className, object, options) {
     }
   };
  
-  var formatMsg = function (method, sig, args, ret) {
-    var msg = [className + '#' + method + '('],
+  var formatMsg = function (name, sig, args, ret) {
+    var msg = [className + '#' + name + '('],
         i;
     for (i = 0; i < args.length; i++) {
       if (i !== 0) {
@@ -58,9 +58,8 @@ var snoop = function (className, object, options) {
     return msg;
   };
  
-  var makeFn = function (method) {
-    var fn  = object[method],
-        sig = fnSignature(fn);
+  var makeFn = function (name, fn) {
+    var sig = fnSignature(fn);
     return function (/* ... */) {
       var args = Array.prototype.slice.call(arguments),
           ret;
@@ -69,7 +68,7 @@ var snoop = function (className, object, options) {
       }
       console.log.apply(
         console,
-        formatMsg(method, sig, args, ret)
+        formatMsg(name, sig, args, ret)
       );
       return ret;
     };
@@ -97,7 +96,7 @@ var snoop = function (className, object, options) {
 
   // augment the methods
   methods.forEach(function (method) {
-    object[method] = makeFn(method);
+    object[method] = makeFn(method, object[method]);
   });
 
   return object;
