@@ -6,7 +6,7 @@ var snoop = function (className, object, options) {
       showArgNames = options.showArgNames;
 
   if (typeof execute      === 'undefined') { execute      = true; }
-  if (typeof showReturn   === 'undefined') { showArgNames = true; }
+  if (typeof showReturn   === 'undefined') { showReturn   = true; }
   if (typeof showArgNames === 'undefined') { showArgNames = true; }
 
   var FN_ARGS        = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
