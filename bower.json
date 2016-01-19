@@ -1,0 +1,21 @@
+{
+  "name": "Snoop",
+  "version": "0.0.1",
+  "homepage": "https://github.com/icholy/Snoop",
+  "authors": [
+    "Ilia Choly"
+  ],
+  "typescript": {
+    "definition": "build/Snoop.d.ts"
+  },
+  "description": "Snoop",
+  "main": "build/Snoop.js",
+  "keywords": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {}
+}
