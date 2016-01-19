@@ -5,8 +5,6 @@ module Snoop {
     execute:      boolean;
     showReturn:   boolean;
     showArgNames: boolean;
-    whitelist:    string[];
-    blacklist:    string[];
   }
 
   interface MethodInfo {
@@ -18,19 +16,22 @@ module Snoop {
     options:    Options;
   }
 
-  export var objects = {};
-
-  export function register(name: string, object: any, options: Options): void {
-    if (objects.hasOwnProperty(name)) {
+  export function register(name: string, object: any): void {
+    if (this.hasOwnProperty(name)) {
       throw new Error(`Already snooping on ${name}`);
     }
-    let methods = enumerateMethods(objects);
+    let options = {
+      execute:      true,
+      showReturn:   true,
+      showArgNames: true
+    };
+    let methods = enumerateMethods(object);
     let wrapper = {};
     methods.forEach((method: string) => {
       let info = methodInfo(object, name, method, options);
       wrapper[method] = new Method(info);
     });
-    objects[name] = wrapper;
+    this[name] = wrapper;
   }
 
   class Method {

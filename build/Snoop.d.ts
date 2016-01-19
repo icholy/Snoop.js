@@ -3,9 +3,6 @@ declare module Snoop {
         execute: boolean;
         showReturn: boolean;
         showArgNames: boolean;
-        whitelist: string[];
-        blacklist: string[];
     }
-    var objects: {};
-    function register(name: string, object: any, options: Options): void;
+    function register(name: string, object: any): void;
 }
