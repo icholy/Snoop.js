@@ -3,6 +3,8 @@ Snoop.js
 
 > This is a debugging tool that logs method invocations on an object.
 
+![](http://i.imgur.com/nQv8ADL.jpg)
+
 ### Register an object to snoop on.
 
 ``` js
@@ -21,8 +23,6 @@ Snoop.$.ajax.on();
 ``` js
 Snoop.$.ajax.off();
 ```
-
-![](http://i.imgur.com/nQv8ADL.jpg)
 
 ![](http://i.imgur.com/GeYpexW.gif)
 
