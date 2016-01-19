@@ -2,7 +2,6 @@
 module Snoop {
 
   export interface Options {
-    execute:      boolean;
     showReturn:   boolean;
     showArgNames: boolean;
   }
@@ -28,7 +27,6 @@ module Snoop {
       throw new Error(`Already snooping on ${name}`);
     }
     let options = {
-      execute:      true,
       showReturn:   true,
       showArgNames: true
     };
@@ -108,8 +106,8 @@ module Snoop {
    * @param ret Method return value
    * @return Message ready to print
    */
-  function formatMsg(info: MethodInfo, args: any[], ret: any): string[] {
-    var msg = [info.objectName + '#' + info.funcName + '('],
+  function formatMsg(msgType: string, info: MethodInfo, args: any[], ret: any): string[] {
+    var msg = [msgType + ' - ' + info.objectName + '#' + info.funcName + '('],
         i;
     for (i = 0; i < args.length; i++) {
       if (i !== 0) {
@@ -136,13 +134,14 @@ module Snoop {
    */
   function makeFn(info: MethodInfo): Function {
     return function (...args:any[]) {
-      var ret;
-      if (info.options.execute) {
-        ret = info.func.apply(this, args);
-      }
       console.log.apply(
         console,
-        formatMsg(info, args, ret)
+        formatMsg('call', info, args, undefined)
+      );
+      let ret = info.func.apply(this, args);
+      console.log.apply(
+        console,
+        formatMsg('return', info, args, ret)
       );
       return ret;
     };

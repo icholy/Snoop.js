@@ -1,6 +1,5 @@
 declare module Snoop {
     interface Options {
-        execute: boolean;
         showReturn: boolean;
         showArgNames: boolean;
     }
