@@ -28,11 +28,13 @@ module Snoop {
     if (methods.length === 0) {
       methods = enumerateMethods(object);
     }
-    let wrapper = {};
-    methods.forEach((method: string) => {
+    let wrapper: any = {};
+    function snoop(method: string) {
       let info = methodInfo(object, name, method, options);
       wrapper[method] = new Method(info);
-    });
+    }
+    methods.forEach(snoop);
+    wrapper.snoop = snoop;
     this[name] = wrapper;
   }
 
