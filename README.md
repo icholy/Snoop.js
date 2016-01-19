@@ -24,5 +24,6 @@ Snoop.$.ajax.on();
 Snoop.$.ajax.off();
 ```
 
+### Demo
 ![](http://i.imgur.com/GeYpexW.gif)
 
