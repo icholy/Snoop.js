@@ -16,7 +16,7 @@ module Snoop {
     options:    Options;
   }
 
-  export function register(name: string, object: any): void {
+  export function register(name: string, object: any, methods: string[] = []): void {
     if (this.hasOwnProperty(name)) {
       throw new Error(`Already snooping on ${name}`);
     }
@@ -25,7 +25,9 @@ module Snoop {
       showReturn:   true,
       showArgNames: true
     };
-    let methods = enumerateMethods(object);
+    if (methods.length === 0) {
+      methods = enumerateMethods(object);
+    }
     let wrapper = {};
     methods.forEach((method: string) => {
       let info = methodInfo(object, name, method, options);
@@ -116,7 +118,7 @@ module Snoop {
     };
   }
 
-  function enumerateMethods(object: any): string[] {
+  export function enumerateMethods(object: any): string[] {
     var methods = [];
     for (var key in object) {
       if (Object.prototype.toString.call(object[key]) === '[object Function]') {
@@ -127,3 +129,9 @@ module Snoop {
   }
 
 }
+
+declare var module: any;
+if (typeof module !== 'undefined') {
+  module.exports = Snoop;
+}
+
