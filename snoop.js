@@ -4,6 +4,8 @@ var snoop = function (className, object, options) {
       execute      = options.execute,
       showReturn   = options.showReturn,
       showArgNames = options.showArgNames,
+      whitelist    = options.whitelist,
+      blacklist    = options.blacklist,
       callback     = options.callback;
 
   var noop = function () {};
@@ -11,7 +13,9 @@ var snoop = function (className, object, options) {
   if (typeof execute      === 'undefined') { execute      = true; }
   if (typeof showReturn   === 'undefined') { showReturn   = true; }
   if (typeof showArgNames === 'undefined') { showArgNames = true; }
-  if (typeof callback     === 'undefined') { filter       = noop; }
+  if (typeof whitelist    === 'undefined') { whitelist    = [];   }
+  if (typeof blacklist    === 'undefined') { blacklist    = [];   }
+  if (typeof callback     === 'undefined') { callback     = noop; }
 
   var FN_ARGS        = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
       FN_ARG_SPLIT   = /,/,
@@ -34,8 +38,8 @@ var snoop = function (className, object, options) {
     }
   };
  
-  var formatMsg = function (key, sig, args, ret) {
-    var msg = [className + '#' + key + '('],
+  var formatMsg = function (method, sig, args, ret) {
+    var msg = [className + '#' + method + '('],
         i;
     for (i = 0; i < args.length; i++) {
       if (i !== 0) {
@@ -54,8 +58,8 @@ var snoop = function (className, object, options) {
     return msg;
   };
  
-  var makeFn = function (key) {
-    var fn  = object[key],
+  var makeFn = function (method) {
+    var fn  = object[method],
         sig = fnSignature(fn);
     return function (/* ... */) {
       var args = Array.prototype.slice.call(arguments),
@@ -63,21 +67,38 @@ var snoop = function (className, object, options) {
       if (execute) {
         ret = fn.apply(this, args);
       }
-      if (callback(key, args, ret) === false) {
-        console.log.apply(
-          console,
-          formatMsg(key, sig, args, ret)
-        );
-      }
+      console.log.apply(
+        console,
+        formatMsg(method, sig, args, ret)
+      );
       return ret;
     };
   };
- 
+
+  // enumerate all the methods
+  var methods = [];
   for (var key in object) {
     if (Object.prototype.toString.call(object[key]) === '[object Function]') {
-      object[key] = makeFn(key);
+      methods.push(key);
     }
   }
- 
+
+  // enforce white and black lists
+  if (whitelist.length > 0) {
+    methods = methods.filter(function (method) {
+      return whitelist.indexOf(method) !== -1;
+    });
+  }
+  if (blacklist.length > 0) {
+    methods = methods.filter(function (method) {
+      return blacklist.indexOf(method) === -1;
+    });
+  }
+
+  // augment the methods
+  methods.forEach(function (method) {
+    object[method] = makeFn(method);
+  });
+
   return object;
 };
