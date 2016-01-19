@@ -91,9 +91,8 @@ module Snoop {
   }
  
   function makeFn(info: MethodInfo): Function {
-    return function (/* ... */) {
-      var args = Array.prototype.slice.call(arguments),
-          ret;
+    return function (...args:any[]) {
+      var ret;
       if (info.options.execute) {
         ret = info.func.apply(this, args);
       }
