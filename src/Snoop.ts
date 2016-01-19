@@ -16,7 +16,7 @@ module Snoop {
     options:    Options;
   }
 
-  export function register(name: string, object: any): void {
+  export function register(name: string, object: any, allon: boolean = false): void {
     if (this.hasOwnProperty(name)) {
       throw new Error(`Already snooping on ${name}`);
     }
@@ -30,6 +30,9 @@ module Snoop {
     function snoop(method: string) {
       let info = methodInfo(object, name, method, options);
       wrapper[method] = new Method(info);
+      if (allon) {
+        wrapper[method].on();
+      }
     }
     methods.forEach(snoop);
     wrapper.snoop = snoop;
