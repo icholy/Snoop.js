@@ -16,7 +16,14 @@ module Snoop {
     options:    Options;
   }
 
-  export function register(name: string, object: any, allon: boolean = false): void {
+  /**
+   * Register an object for snooping
+   *
+   * @param name The object's name
+   * @param object The object
+   * @param allon Turn on snooping on all methods
+   */
+  export function register(name: string, object: any, allon?: boolean = false): void {
     if (this.hasOwnProperty(name)) {
       throw new Error(`Already snooping on ${name}`);
     }
@@ -43,11 +50,17 @@ module Snoop {
 
     constructor(public info: MethodInfo) {}
 
+    /**
+     * Turn on snooping for this method
+     */
     on(): void {
       let { object, funcName } = this.info;
       object[funcName] = makeFn(this.info);
     }
 
+    /**
+     * Turn off snooping for this method
+     */
     off(): void {
       let { object, funcName, func } = this.info;
       object[funcName] = func;
