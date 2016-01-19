@@ -12,3 +12,5 @@ Snoop.$.ajax.on();
 ```
 
 ![](http://i.imgur.com/nQv8ADL.jpg)
+
+![](http://i.imgur.com/GeYpexW.gif)
