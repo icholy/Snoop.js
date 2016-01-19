@@ -23,7 +23,7 @@ module Snoop {
    * @param object The object
    * @param allon Turn on snooping on all methods
    */
-  export function register(name: string, object: any, allon?: boolean = false): void {
+  export function register(name: string, object: any, allon: boolean = false): void {
     if (this.hasOwnProperty(name)) {
       throw new Error(`Already snooping on ${name}`);
     }
@@ -71,6 +71,12 @@ module Snoop {
       FN_ARG_SPLIT   = /,/,
       STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
  
+  /**
+   * Extract a function's parameter names
+   *
+   * @param fn The Function
+   * @return An array of the parameters
+   */
   function fnSignature(fn: Function): string[] {
     var fnText = fn.toString().replace(STRIP_COMMENTS, ''),
         args   = fnText.match(FN_ARGS);
@@ -78,8 +84,14 @@ module Snoop {
     return args[1].split(FN_ARG_SPLIT).map(function (arg) {
       return arg.trim();
     });
-  };
+  }
  
+  /**
+   * Format an argument for printing
+   *
+   * @param arg The argument to format
+   * @return Formatted argument
+   */
   function formatArg(arg: any): any {
     if (typeof arg === 'string') {
       return '"' + arg + '"';
@@ -88,6 +100,14 @@ module Snoop {
     }
   }
  
+  /**
+   * Format a method invokation for printing
+   *
+   * @param info Context information for the method
+   * @param args Arguments the method was invoked with
+   * @param ret Method return value
+   * @return Message ready to print
+   */
   function formatMsg(info: MethodInfo, args: any[], ret: any): string[] {
     var msg = [info.objectName + '#' + info.funcName + '('],
         i;
@@ -108,6 +128,12 @@ module Snoop {
     return msg;
   }
  
+  /**
+   * Make a proxy function that logs invocations
+   *
+   * @param info Context information for the method
+   * @return The proxy function
+   */
   function makeFn(info: MethodInfo): Function {
     return function (...args:any[]) {
       var ret;
@@ -122,6 +148,15 @@ module Snoop {
     };
   }
 
+  /**
+   * Create context information for a method
+   *
+   * @param object Method's parent object
+   * @param objectName parent object's name
+   * @param funcName The method property name
+   * @param options Snoop options
+   * @return Context information for method
+   */
   function methodInfo(object: any, objectName: string, funcName: string, options: Options): MethodInfo {
     let func = object[funcName];
     return {
@@ -134,7 +169,13 @@ module Snoop {
     };
   }
 
-  export function enumerateMethods(object: any): string[] {
+  /**
+   * Enumerate methods on an object
+   *
+   * @param object The object to get method names from
+   * @return Array of method names
+   */
+  function enumerateMethods(object: any): string[] {
     var methods = [];
     for (var key in object) {
       if (Object.prototype.toString.call(object[key]) === '[object Function]') {

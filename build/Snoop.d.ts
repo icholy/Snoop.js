@@ -4,7 +4,13 @@ declare module Snoop {
         showReturn: boolean;
         showArgNames: boolean;
     }
+    /**
+     * Register an object for snooping
+     *
+     * @param name The object's name
+     * @param object The object
+     * @param allon Turn on snooping on all methods
+     */
     function register(name: string, object: any, allon?: boolean): void;
-    function enumerateMethods(object: any): string[];
 }
 declare var module: any;
