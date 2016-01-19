@@ -2,6 +2,7 @@ Snoop.js
 ========
 
 > This is a debugging tool that logs method invocations on an object.
+> The API was designed to be easy to use interactively with autocomplete.
 
 ![](http://i.imgur.com/nQv8ADL.jpg)
 
