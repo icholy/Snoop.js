@@ -4,7 +4,7 @@ declare module Snoop {
         showReturn: boolean;
         showArgNames: boolean;
     }
-    function register(name: string, object: any, methods?: string[]): void;
+    function register(name: string, object: any): void;
     function enumerateMethods(object: any): string[];
 }
 declare var module: any;
